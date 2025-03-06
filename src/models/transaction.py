@@ -6,7 +6,7 @@ from sqlmodel import Field, SQLModel
 from src.env import engine
 
 
-class Transactions(SQLModel, table=True):
+class Transaction(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     description: str
     date: datetime

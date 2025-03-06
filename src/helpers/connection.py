@@ -4,10 +4,9 @@ from sqlalchemy.orm import sessionmaker
 from src.env import engine
 
 
-class Database:
+class Connection:
     def __init__(self):
         self.engine = engine
-        self.session = self.make_session()
 
     def make_session(self):
         Session = sessionmaker(bind=self.engine)

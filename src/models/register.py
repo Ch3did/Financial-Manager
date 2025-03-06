@@ -6,7 +6,7 @@ from sqlmodel import Field, SQLModel
 from src.env import engine
 
 
-class Import(SQLModel, table=True):
+class OFXRegister(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     org_id: str
     account: str
