@@ -1,43 +1,40 @@
 import arrow
 import click
 
-from src.views.categories import (
-    create_category_view,
-    get_categories_list_view,
-    get_category_by_id_view,
-)
+from src.views.categories import (create_category_view,
+                                  get_categories_list_view,
+                                  get_category_by_id_view)
 from src.views.config import run_migrate_view
-from src.views.debit import (
-    get_debit_by_id_view,
-    list_debit_from_period_view,
-    update_bank_statment_view,
-    update_debit_category_view,
-)
+from src.views.debit import (get_debit_by_id_view, list_debit_from_period_view,
+                             update_bank_statment_view,
+                             update_debit_category_view)
 from src.views.homescreen import make_homescreen
+
+@click.command()
+@click.argument('nome')
+def saudacao(nome):
+    click.echo(f"Olá, {nome}!")
+
 
 
 # Get data
 @click.group("get", help="Monetary Get: Get some info")
-def mget():
-    ...
+def mget(): ...
 
 
 # Input data
 @click.group("put", help="Monetary Put: Put some info")
-def mput():
-    ...
+def mput(): ...
 
 
 # Update data
 @click.group("up", help="Monetary Update: Update some info")
-def mup():
-    ...
+def mup(): ...
 
 
 # Configuration
 @click.group("confg", help="Monetary Config: Run configurations")
-def mconf():
-    ...
+def mconf(): ...
 
 
 # @click.group("olar", )
@@ -56,7 +53,7 @@ def home(t):
     "--period",
     "-p",
     help="Get info for a period",
-    default=str(arrow.now().format(f"YYYY-MM-01")),
+    # default=str(arrow.now().format(f"YYYY-MM-01")),
 )
 def get_debit_list(period):
     list_debit_from_period_view(period)
@@ -108,6 +105,18 @@ def update_debit_category(id):
 # CONFIGURATION
 
 
-@mconf.command("migrate", help="Run migrations")
+@click.command("migrate", help="Run migrations")
 def run_migrations():
     run_migrate_view()
+    
+    
+
+
+mconf.add_command(run_migrations)
+
+
+if __name__ == "__main__":
+    mconf()
+    mget()
+    mput()
+    mup()

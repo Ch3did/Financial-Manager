@@ -4,7 +4,7 @@ from loguru import logger
 from src.helpers.database import Database
 from src.helpers.exception import ATMException
 from src.models.categories import Categories
-from src.models.debit import Debit
+from src.models.transactions import Transactions as Debit
 
 
 class Debit_ATM:
@@ -37,7 +37,7 @@ class Debit_ATM:
             )
 
             self.conn.add(transaction)
-            logger.info(f"inserido no banco: {item['title']}")
+            logger.info(f"inserido no OFXHandlero: {item['title']}")
             self.conn.commit()
             self.conn.close()
 

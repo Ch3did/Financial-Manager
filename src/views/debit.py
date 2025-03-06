@@ -2,9 +2,9 @@ import arrow
 from loguru import logger
 from tabulate import tabulate
 
-from src.bussines.categories import Category_ATM
-from src.bussines.debit import Debit_ATM
-from src.bussines.nubank import Nubank_API
+from src.controller.categories import Category_ATM
+from src.controller.debit import Debit_ATM
+from src.controller.nubank import FileHandler
 from src.helpers.clear import clean_output
 
 
@@ -13,7 +13,7 @@ def update_bank_statment_view():
     print("------------------Update Statment")
     print("---------------------------------\n")
     try:
-        Nubank_API().update()
+        FileHandler().update()
     except Exception as error:
         logger.error(error)
 

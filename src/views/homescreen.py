@@ -2,9 +2,9 @@ import sys
 
 from loguru import logger
 
-from src.bussines.categories import Category_ATM
-from src.bussines.debit import Debit_ATM
-from src.get_env import USER_NAME
+from src.controller.categories import Category_ATM
+from src.controller.debit import Debit_ATM
+from src.env import USER_NAME
 from src.helpers.clear import clean_output
 
 

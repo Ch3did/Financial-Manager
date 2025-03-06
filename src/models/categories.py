@@ -1,22 +1,22 @@
-import arrow
-from sqlalchemy import Column, DateTime, Integer, Numeric, String, Text
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql.sqltypes import Boolean
+from datetime import datetime
+from typing import Optional
 
-from src.models.base import Base
+from sqlmodel import Field, SQLModel
+
+from src.env import engine
 
 
-class Categories(Base):
-    __tablename__ = "categories"
+class Categories(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(60), nullable=False)
-    description = Column(Text, nullable=True)
-    expected = Column(Numeric, nullable=True)
-    created_at = Column(
-        DateTime, default=arrow.now().strftime("%Y-%m-%d")
-    )  # Data da primeira vez que foi usado
-    is_visible = Column(Boolean, default=True)
-    is_spend = Column(Boolean, default=False)
+    name: str
+    description: str
+    expected: float
+    created_at: datetime
+    updated_at: datetime
+    is_visible: bool
     # TODO: Add key-words
-    debit = relationship("Debit")
+
+
+def make_migrations():
+    SQLModel.metadata.create_all(engine)
