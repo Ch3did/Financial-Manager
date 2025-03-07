@@ -13,3 +13,5 @@ __pycache__/
 
 
 sql/
+temp/
+monetary_maid.db
