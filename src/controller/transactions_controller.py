@@ -1,7 +1,6 @@
 import xml.etree.ElementTree as ET
 from typing import List
 
-import arrow
 from loguru import logger
 
 from src.controller.database_controller import Database
@@ -20,7 +19,7 @@ class TransactionController(Database):
         except Exception as err:
             print(err)
 
-    def create_transaction(self, ofx_data) -> Transaction:
+    def create_transaction(self, ofx_data: dict) -> Transaction:
         for stmttrn in ofx_data.findall(".//STMTTRN"):
             transaction = Transaction(
                 description=stmttrn.find("MEMO").text,
@@ -39,15 +38,18 @@ class TransactionController(Database):
         register = OFXRegister(
             org_id=ofx_data.find(".//FI/FID").text,
             account=ofx_data.find(".//ACCTID").text,
-            start_date=ofx_data.find(".//BANKTRANLIST/DTSTART").text,
-            end_date=ofx_data.find(".//BANKTRANLIST/DTEND").text,
+            start_date=parse_date(ofx_data.find(".//BANKTRANLIST/DTSTART").text),
+            end_date=parse_date(ofx_data.find(".//BANKTRANLIST/DTEND").text),
             organization=ofx_data.find(".//FI/ORG").text,
             amount=float(ofx_data.find(".//LEDGERBAL/BALAMT").text),
         )
         self._add_register(register)
 
-    def incomplete_transactions(self) -> List[Transaction]:
+    def get_incomplete_transactions(self) -> List[Transaction]:
         return self._get_transactions_without_category()
 
     def update_transaction_category(self, transaction: Transaction) -> None:
         self._update_transaction(transaction)
+
+    def get_transactions(self, limit: int = 10):
+        return self._get_transactions_with_limit(limit)

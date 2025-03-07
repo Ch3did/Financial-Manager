@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel  # , PrivateAttr
 
 from src.env import engine
 
@@ -16,7 +16,8 @@ class Transaction(SQLModel, table=True):
     organization: str
     org_id: str
     account: str
-    category_id: int
+    # _category_name: str = PrivateAttr()
+    category_id: int | None
 
     def to_json(self, **kwargs):
         data = self.dict(**kwargs)
