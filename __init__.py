@@ -4,8 +4,7 @@ from main import home, mconf, mget, mput, mup
 
 
 @group("mm")
-def mm():
-    ...
+def mm(): ...
 
 
 mm.add_command(mget)
