@@ -74,4 +74,5 @@ class Database:
             )
 
     def _get_category_list(self):
-        return self.conn.query(Category).all()
+        with self.conn.make_session()() as session:
+            return session.query(Category).all()

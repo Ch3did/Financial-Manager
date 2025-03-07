@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from src.controller.database_controller import Database
@@ -11,10 +12,10 @@ class CategoryController(Database):
             name=data["name"],
             description=data["description"],
             expected=data["expected"],
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
         )
-
-        if float(category.expected) < 0:
-            Category.is_spend = True
+        self._add_category(category)
 
     def get_category(self) -> List[Category]:
         return self._get_category_list()

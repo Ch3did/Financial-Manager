@@ -15,7 +15,7 @@ class CategoryView(Output):
         try:
             self._make_rodape("Create New Category")
             category_dict = self._ask_about_category()
-            self.category._add_category(category_dict)
+            self.category.create_category(category_dict)
 
         except Exception as error:
             logger.error(f"{error}")
