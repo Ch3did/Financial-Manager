@@ -1,9 +1,9 @@
 import arrow
 import click
 
-from src.views.categories import CategoryView
+from src.views.category_view import CategoryView
 from src.views.config import ConfigView
-from src.views.transaction import TransactionsView
+from src.views.transaction_view import TransactionsView
 
 
 @click.group(help="Configuration options")
@@ -33,12 +33,15 @@ def run_migrations():
     default="10",
 )
 def top_transactions(results):
-    TransactionsView.return_top_transactions(results)
+    TransactionsView().return_top_transactions(results)
 
 
 @config.command("import", help="Imports an OFX")
-def update_transactions():
-    TransactionsView.import_ofx()
+@click.argument(
+    "path", default="~/ofx.ofx", type=click.Path(exists=True), required=False
+)
+def update_transactions(path):
+    TransactionsView().import_ofx(path)
 
 
 # Category
