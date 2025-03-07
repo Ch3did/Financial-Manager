@@ -2,15 +2,15 @@ import sys
 
 from loguru import logger
 
-from src.controller.category_controller import Category_ATM
+from src.controller.category_controller import CategoryController
 from src.controller.config_controller import Config
-from src.controller.database_controller import Pai
+from src.controller.database_controller import Database
 from src.helpers.clear import clean_output
 
 
 class ConfigView:
     @clean_output
-    def run_migrate():
+    def run_migrate(self):
         try:
             Config().make_migrate()
             logger.info("Tables Ready")
@@ -19,10 +19,10 @@ class ConfigView:
             logger.error(f"Tables are Down... {error}")
 
     @clean_output
-    def make_homescreen(search_type):
+    def make_homescreen(self, search_type):
         try:
-            categories = Category_ATM().get_categories_list(search_type)
-            transactions = Pai().get_debits()
+            categories = CategoryController().get_categories_list(search_type)
+            transactions = Database().get_debits()
             plot_relation = {}
             for values in transactions:
                 if values[1].name not in plot_relation:
