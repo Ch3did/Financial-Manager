@@ -1,9 +1,9 @@
 import click
 
+from src.env import FOLDER_PATH
 from src.views.category_view import CategoryView
 from src.views.config import ConfigView
 from src.views.transaction_view import TransactionsView
-from src.env import FOLDER_PATH
 
 
 @click.group(help="Financial-Manager")
@@ -33,7 +33,10 @@ def top_transactions(results):
 
 @config.command("import", help="Imports an OFX")
 @click.argument(
-    "path", default=f"{FOLDER_PATH}/arquivo.ofx", type=click.Path(exists=True), required=False
+    "path",
+    default=f"{FOLDER_PATH}/arquivo.ofx",
+    type=click.Path(exists=True),
+    required=False,
 )
 def update_transactions(path):
     TransactionsView().import_ofx(path)
@@ -41,7 +44,7 @@ def update_transactions(path):
 
 # Category
 #     ___     ___     ___     ___     ___     ___     ___     ___     ___
-@config.command(help="Get categories list")
+@config.command("category", help="Get categories list")
 def get_category_info():
     CategoryView().get_categories()
 
