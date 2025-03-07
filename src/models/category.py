@@ -14,7 +14,6 @@ class Category(SQLModel, table=True):
     expected: float
     created_at: datetime
     updated_at: datetime
-    is_visible: bool
     # TODO: Add key-words
 
 
