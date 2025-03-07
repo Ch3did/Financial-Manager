@@ -14,7 +14,6 @@ class Category(SQLModel, table=True):
     expected: float
     created_at: datetime
     updated_at: datetime
-    # TODO: Add key-words
 
 
 def make_migrations():
