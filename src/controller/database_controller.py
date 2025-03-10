@@ -34,7 +34,7 @@ class Database:
         with self.conn.make_session()() as session:
             exists = (
                 session.query(Category)
-                .filter((Category.name == incomming_category))
+                .filter(Category.name == incomming_category.name)
                 .first()
             )
         return bool(exists)
@@ -61,10 +61,14 @@ class Database:
             )
         return bool(exists)
 
-    def _get_transactions_with_limit(self, limit: int = 10):
+    def _get_transactions_with_limit(self, limit: int = 10, offset: int = 0):
         with self.conn.make_session()() as session:
             return (
-                session.query(Transaction).order_by(Transaction.date).limit(limit).all()
+                session.query(Transaction)
+                .order_by(Transaction.date)
+                .limit(limit)
+                .offset(offset)
+                .all()
             )
 
     def _get_transactions_without_category(self):

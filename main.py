@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import click
 
 from src.env import FOLDER_PATH
@@ -40,6 +42,17 @@ def top_transactions(results):
 )
 def update_transactions(path):
     TransactionsView().import_ofx(path)
+
+
+@config.command("export", help="Export an CSV with all transactions")
+@click.argument(
+    "path",
+    default=f"{FOLDER_PATH}output_{datetime.now().isoformat()[:10]}.csv",
+    type=click.Path(exists=False),
+    required=False,
+)
+def export_transactions(path):
+    TransactionsView().export_csv(path)
 
 
 # Category

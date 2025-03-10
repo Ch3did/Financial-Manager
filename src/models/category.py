@@ -1,7 +1,7 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 from src.env import engine
 
@@ -14,6 +14,8 @@ class Category(SQLModel, table=True):
     expected: float
     created_at: datetime
     updated_at: datetime
+
+    transactions: List["Transaction"] = Relationship(back_populates="category")
 
 
 def make_migrations():

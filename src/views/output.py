@@ -10,12 +10,15 @@ class Output:
         self.total_lenght = 30
         self.restricted_columns = ["id", "transaction_id", "category_id"]
 
-    def _get_visible_columns(self, model_class: type[SQLModel]) -> list[str]:
-        all_columns = [
+    def _get_columns(self, model_class: type[SQLModel]) -> list[str]:
+        return [
             field
             for field in model_class.__annotations__.keys()
             if hasattr(model_class, "__fields__") and field in model_class.__fields__
         ]
+
+    def _get_visible_columns(self, model_class: type[SQLModel]) -> list[str]:
+        all_columns = self._get_columns(model_class)
 
         return [
             column for column in all_columns if column not in self.restricted_columns
@@ -32,7 +35,7 @@ class Output:
 
     def _ask_about_category(self) -> dict:
         return {
-            "Name": input("Name: "),
+            "name": input("Name: "),
             "description": input("Description: "),
             "expected": float(input("Expected (%.2): ")),
             "created_at": datetime.now(),
