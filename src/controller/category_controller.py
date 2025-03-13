@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from src.controller.database_controller import Database
+from src.controller.database import Database
 from src.models.category import Category
 
 

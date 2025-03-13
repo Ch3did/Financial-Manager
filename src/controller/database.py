@@ -1,37 +1,44 @@
 from loguru import logger
 from sqlalchemy import and_
 
-from src.helpers.connection import Connection
 from src.models.category import Category
 from src.models.register import OFXRegister
 from src.models.transaction import Transaction
+from sqlalchemy.orm import sessionmaker
+
+from src.env import engine
 
 
 class Database:
     def __init__(self):
-        self.conn = Connection()
+        self.engine = engine
+
+    def make_session(self):
+        Session = sessionmaker(bind=self.engine)
+        return Session
+
 
     def _add_debit(self, transaction: Transaction) -> None:
-        with self.conn.make_session()() as session:
+        with self.make_session()() as session:
             if not self._transaction_exists(transaction):
                 session.add(transaction)
                 logger.debug(f"Inserida nova Transação: {transaction.description}")
                 session.commit()
 
     def _add_register(self, register: OFXRegister):
-        with self.conn.make_session()() as session:
+        with self.make_session()() as session:
             session.add(register)
             logger.debug("Inserido novo Registro de Importação")
             session.commit()
 
     def _add_category(self, category: Category):
-        with self.conn.make_session()() as session:
+        with self.make_session()() as session:
             if not self._category_exists(category):
                 session.add(category)
                 session.commit()
 
     def _category_exists(self, incomming_category: Category) -> bool:
-        with self.conn.make_session()() as session:
+        with self.make_session()() as session:
             exists = (
                 session.query(Category)
                 .filter(Category.name == incomming_category.name)
@@ -40,7 +47,7 @@ class Database:
         return bool(exists)
 
     def _transaction_exists(self, incomming_transaction: Transaction) -> bool:
-        with self.conn.make_session()() as session:
+        with self.make_session()() as session:
             exists = (
                 session.query(Transaction)
                 .filter(
@@ -62,7 +69,7 @@ class Database:
         return bool(exists)
 
     def _get_transactions_with_limit(self, limit: int = 10, offset: int = 0):
-        with self.conn.make_session()() as session:
+        with self.make_session()() as session:
             return (
                 session.query(Transaction)
                 .order_by(Transaction.date)
@@ -72,11 +79,11 @@ class Database:
             )
 
     def _get_transactions_without_category(self):
-        with self.conn.make_session()() as session:
+        with self.make_session()() as session:
             return (
                 session.query(Transaction).filter(Transaction.category_id is None).all()
             )
 
     def _get_category_list(self):
-        with self.conn.make_session()() as session:
-            return session.query(Category).all()
+        with self.make_session()() as session:
+             return session.query(Category).order_by(Category.id).all()

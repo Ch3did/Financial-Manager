@@ -3,7 +3,7 @@ from typing import List
 
 from loguru import logger
 
-from src.controller.database_controller import Database
+from src.controller.database import Database
 from src.helpers import create_csv_file, parse_date, read_ofx_file
 from src.models.register import OFXRegister
 from src.models.transaction import Transaction
