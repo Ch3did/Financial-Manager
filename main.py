@@ -45,8 +45,11 @@ def update_transactions(path):
     if os.path.isfile(path):
         TransactionsView().import_ofx(path)
     else:
-        [TransactionsView().import_ofx(f"{path}{item}") for item in os.listdir(path) if item[-4:] == ".ofx"]
-        
+        [
+            TransactionsView().import_ofx(f"{path}{item}")
+            for item in os.listdir(path)
+            if item[-4:] == ".ofx"
+        ]
 
 
 @config.command("export", help="Export an CSV with all transactions")

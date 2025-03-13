@@ -2,8 +2,8 @@ from loguru import logger
 
 from src.controller.transactions_controller import TransactionController
 from src.helpers import clean_output
-from src.views.output import Output
 from src.helpers.exception import ExtractionException, InputException
+from src.views.output import Output
 
 
 class TransactionsView(Output):

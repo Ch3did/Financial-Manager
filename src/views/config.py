@@ -4,9 +4,9 @@ from loguru import logger
 
 from src.controller.category_controller import CategoryController
 from src.controller.config_controller import Config
-from src.helpers import DatabaseException
 from src.controller.database_controller import Database
 from src.helpers.clear import clean_output
+from src.helpers.exception import DatabaseException
 
 
 class ConfigView:
