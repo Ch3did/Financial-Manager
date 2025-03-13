@@ -1,12 +1,12 @@
 from loguru import logger
 from sqlalchemy import and_
+from sqlalchemy.orm import joinedload, sessionmaker
 
+from src.env import engine
 from src.models.category import Category
 from src.models.register import OFXRegister
 from src.models.transaction import Transaction
-from sqlalchemy.orm import sessionmaker
-
-from src.env import engine
+from datetime import datetime
 
 
 class Database:
@@ -16,7 +16,6 @@ class Database:
     def make_session(self):
         Session = sessionmaker(bind=self.engine)
         return Session
-
 
     def _add_debit(self, transaction: Transaction) -> None:
         with self.make_session()() as session:
@@ -72,9 +71,20 @@ class Database:
         with self.make_session()() as session:
             return (
                 session.query(Transaction)
+                .options(joinedload(Transaction.category))
                 .order_by(Transaction.date)
                 .limit(limit)
                 .offset(offset)
+                .all()
+            )
+            
+    def _get_transactions_with_range(self, start_date: datetime, end_date: datetime):
+        with self.make_session()() as session:
+             return (
+                session.query(Transaction)
+                .options(joinedload(Transaction.category))
+                .filter(Transaction.date >= start_date, Transaction.date <= end_date)
+                .order_by(Transaction.date)
                 .all()
             )
 
@@ -86,4 +96,4 @@ class Database:
 
     def _get_category_list(self):
         with self.make_session()() as session:
-             return session.query(Category).order_by(Category.id).all()
+            return session.query(Category).order_by(Category.id).all()

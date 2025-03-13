@@ -8,7 +8,7 @@ from tabulate import tabulate
 class Output:
     def __init__(self):
         self.total_lenght = 30
-        self.restricted_columns = ["id", "transaction_id", "category_id"]
+        self.restricted_columns = ["id", "transaction_id"]
 
     def _get_columns(self, model_class: type[SQLModel]) -> list[str]:
         return [
