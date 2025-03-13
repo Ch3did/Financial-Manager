@@ -5,7 +5,7 @@ import click
 
 from src.env import FOLDER_PATH
 from src.views.category_view import CategoryView
-from src.views.config import ConfigView
+from src.views.config_view import ConfigView
 from src.views.transaction_view import TransactionsView
 
 
@@ -16,9 +16,8 @@ def config(): ...
 # CONFIGURATION
 #     ___     ___     ___     ___     ___     ___     ___     ___     ___
 @config.command("home", help="Print the home screen")
-@click.option("-t", help="Specifies a type of search from Categories", default=1)
-def home(t):
-    ConfigView().make_homescreen(t)
+def home():
+    ConfigView().make_homescreen()
 
 
 @config.command("migrate", help="Run migrations")
