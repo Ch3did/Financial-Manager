@@ -52,7 +52,7 @@ def update_transactions(path):
 @config.command("export", help="Export an CSV with all transactions")
 @click.argument(
     "path",
-    default=f"{FOLDER_PATH}output_{datetime.now().isoformat()[:10]}.csv",
+    default=f"{FOLDER_PATH}/output_{datetime.now().isoformat()[:10]}.csv",
     type=click.Path(exists=False),
     required=False,
 )
