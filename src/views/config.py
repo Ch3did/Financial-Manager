@@ -4,6 +4,7 @@ from loguru import logger
 
 from src.controller.category_controller import CategoryController
 from src.controller.config_controller import Config
+from src.helpers import DatabaseException
 from src.controller.database_controller import Database
 from src.helpers.clear import clean_output
 
@@ -15,7 +16,7 @@ class ConfigView:
             Config().make_migrate()
             logger.info("Tables Ready")
 
-        except Exception as error:
+        except DatabaseException as error:
             logger.error(f"Tables are Down... {error}")
 
     @clean_output
