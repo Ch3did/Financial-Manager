@@ -23,12 +23,12 @@ source "$INSTALL_DIR/venv/bin/activate"
 pip3 install -r "$INSTALL_DIR/requirements.txt"
 
 echo "Creating an alias to run the application..."
-ALIAS_COMMAND="alias $APP_NAME='$INSTALL_DIR/run.sh'"
-if ! grep -q "$ALIAS_COMMAND" "$PROFILE_FILE"; then
-    echo "$ALIAS_COMMAND" >> "$PROFILE_FILE"
-    echo "Alias added to $PROFILE_FILE. Use '$APP_NAME' to run the application."
+MN_FUNCTION="mn() { ~/code/pessoal/me/CLI-For-Nubank-API/run.sh \"\$@\"; }"
+if ! grep -q "$MN_FUNCTION" "$PROFILE_FILE"; then
+    echo "$MN_FUNCTION" >> "$PROFILE_FILE"
+    echo "Function added to $PROFILE_FILE. Use 'mn' to run the application."
 else
-    echo "Alias already exists in $PROFILE_FILE."
+    echo "Function already exists in $PROFILE_FILE."
 fi
 
 # Reload the shell profile
