@@ -6,6 +6,7 @@ import click
 from src.env import FOLDER_PATH
 from src.views.category_view import CategoryView
 from src.views.config_view import ConfigView
+from src.views.register_view import RegisterView
 from src.views.transaction_view import TransactionsView
 
 
@@ -72,6 +73,11 @@ def get_category_info():
 @config.command("create", help="Register a new category")
 def create_category():
     CategoryView().new_category()
+
+
+@config.command("register", help="Create a new register")
+def create_register():
+    RegisterView().new_register()
 
 
 if __name__ == "__main__":

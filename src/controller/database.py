@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from loguru import logger
 from sqlalchemy import and_
 from sqlalchemy.orm import joinedload, sessionmaker
@@ -5,8 +7,8 @@ from sqlalchemy.orm import joinedload, sessionmaker
 from src.env import engine
 from src.models.category import Category
 from src.models.logs import Logs
+from src.models.register import Register
 from src.models.transaction import Transaction
-from datetime import datetime
 
 
 class Database:
@@ -35,6 +37,11 @@ class Database:
             if not self._category_exists(category):
                 session.add(category)
                 session.commit()
+
+    def _add_register(self, register: Register):
+        with self.make_session()() as session:
+            session.add(register)
+            session.commit()
 
     def _category_exists(self, incomming_category: Category) -> bool:
         with self.make_session()() as session:
@@ -77,10 +84,10 @@ class Database:
                 .offset(offset)
                 .all()
             )
-            
+
     def _get_transactions_with_range(self, start_date: datetime, end_date: datetime):
         with self.make_session()() as session:
-             return (
+            return (
                 session.query(Transaction)
                 .options(joinedload(Transaction.category))
                 .filter(Transaction.date >= start_date, Transaction.date <= end_date)
