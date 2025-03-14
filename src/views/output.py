@@ -33,7 +33,22 @@ class Output:
     def _make_transaction_update_form(self):
         pass
 
+    def _make_input_intro(self, obj: str):
+        print(f"Please answer the questions to create a new {obj} object.")
+        print("_________________________________________________" + "_" * len(obj))
+
+    def _ask_about_register(self) -> dict:
+        self._make_input_intro("register")
+
+        return {
+            "sentense: ": input("Sentense: "),
+            "start_date": datetime.now(),
+            "end_date": input("End date: "),
+            "category_id": input("Category id: "),
+        }
+
     def _ask_about_category(self) -> dict:
+        self._make_input_intro("category")
         return {
             "name": input("Name: "),
             "description": input("Description: "),
