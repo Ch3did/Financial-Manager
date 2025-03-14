@@ -5,7 +5,7 @@ from loguru import logger
 
 from src.controller.database import Database
 from src.helpers import create_csv_file, parse_date, read_ofx_file
-from src.models.log import Logs
+from src.models.logs import Logs
 from src.models.transaction import Transaction
 
 

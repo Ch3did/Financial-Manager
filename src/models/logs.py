@@ -16,6 +16,5 @@ class Logs(SQLModel, table=True):
     amount: float
 
 
-
 def make_migrations():
     SQLModel.metadata.create_all(engine)
