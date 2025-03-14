@@ -18,16 +18,7 @@ class Transaction(SQLModel, table=True):
     org_id: str
     account: str
     category_id: Optional[int] = Field(default=None, foreign_key="category.id")
-
     category: Optional[Category] = Relationship(back_populates="transactions")
-
-    def to_json(self, **kwargs):
-        data = self.dict(**kwargs)
-        data["change_timestamp"] = data["change_timestamp"].isoformat()
-        if data["creation_date"] and isinstance(data["creation_date"], datetime):
-            data["creation_date"] = data["creation_date"].isoformat()
-        return data
-
 
 def make_migrations():
     SQLModel.metadata.create_all(engine)

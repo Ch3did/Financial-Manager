@@ -4,7 +4,7 @@ from sqlalchemy.orm import joinedload, sessionmaker
 
 from src.env import engine
 from src.models.category import Category
-from src.models.register import OFXRegister
+from src.models.logs import Logs
 from src.models.transaction import Transaction
 from datetime import datetime
 
@@ -24,9 +24,9 @@ class Database:
                 logger.debug(f"Inserida nova Transação: {transaction.description}")
                 session.commit()
 
-    def _add_register(self, register: OFXRegister):
+    def _add_log(self, log: Logs):
         with self.make_session()() as session:
-            session.add(register)
+            session.add(log)
             logger.debug("Inserido novo Registro de Importação")
             session.commit()
 
@@ -72,7 +72,7 @@ class Database:
             return (
                 session.query(Transaction)
                 .options(joinedload(Transaction.category))
-                .order_by(Transaction.date)
+                .order_by(Transaction.date.desc())
                 .limit(limit)
                 .offset(offset)
                 .all()

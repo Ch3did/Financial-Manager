@@ -16,6 +16,7 @@ class Category(SQLModel, table=True):
     updated_at: datetime
 
     transactions: List["Transaction"] = Relationship(back_populates="category")
+    register: Optional["Register"] = Relationship(back_populates="category")
 
 
 def make_migrations():
