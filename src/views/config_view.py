@@ -16,7 +16,7 @@ class ConfigView(Output):
     @clean_output
     def run_migrate(self):
         try:
-            self.make_migrate()
+            self.config.make_migrate()
             logger.info("Tables Ready")
 
         except DatabaseException as error:

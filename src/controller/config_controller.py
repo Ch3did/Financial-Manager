@@ -8,7 +8,7 @@ from src.controller.database import Database
 class ConfigController(Database):
 
     def make_migrate(self):
-        SQLModel.metadata.create_all(self.conn.engine)
+        SQLModel.metadata.create_all(self.engine)
 
     def get_transactions(
         self, start_date: datetime = None, end_date: datetime = datetime.now()
