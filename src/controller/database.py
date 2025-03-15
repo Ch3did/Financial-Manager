@@ -36,11 +36,13 @@ class Database:
         with self.make_session()() as session:
             if not self._category_exists(category):
                 session.add(category)
+                logger.debug("Inserido novo Category")
                 session.commit()
 
     def _add_register(self, register: Register):
         with self.make_session()() as session:
             session.add(register)
+            logger.debug("Inserido novo Registro de Mapeamento")
             session.commit()
 
     def _category_exists(self, incomming_category: Category) -> bool:
@@ -104,3 +106,12 @@ class Database:
     def _get_category_list(self):
         with self.make_session()() as session:
             return session.query(Category).order_by(Category.id).all()
+
+    def _get_register_valid_list(self, end_date: datetime):
+        with self.make_session()() as session:
+            return (
+                session.query(Register)
+                .filter(Register.end_date <= end_date)
+                .order_by(Register.id)
+                .all()
+            )
