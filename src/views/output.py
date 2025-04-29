@@ -8,14 +8,17 @@ from tabulate import tabulate
 class Output:
     def __init__(self):
         self.total_lenght = 30
-        self.restricted_columns = ["id", "transaction_id", "category_id"]
+        self.restricted_columns = ["id", "transaction_id"]
 
-    def _get_visible_columns(self, model_class: type[SQLModel]) -> list[str]:
-        all_columns = [
+    def _get_columns(self, model_class: type[SQLModel]) -> list[str]:
+        return [
             field
             for field in model_class.__annotations__.keys()
             if hasattr(model_class, "__fields__") and field in model_class.__fields__
         ]
+
+    def _get_visible_columns(self, model_class: type[SQLModel]) -> list[str]:
+        all_columns = self._get_columns(model_class)
 
         return [
             column for column in all_columns if column not in self.restricted_columns
@@ -30,9 +33,24 @@ class Output:
     def _make_transaction_update_form(self):
         pass
 
-    def _ask_about_category(self) -> dict:
+    def _make_input_intro(self, obj: str):
+        print(f"Please answer the questions to create a new {obj} object.")
+        print("_________________________________________________" + "_" * len(obj))
+
+    def _ask_about_register(self) -> dict:
+        self._make_input_intro("register")
+
         return {
-            "Name": input("Name: "),
+            "sentense: ": input("Sentense: "),
+            "start_date": datetime.now(),
+            "end_date": input("End date: "),
+            "category_id": input("Category id: "),
+        }
+
+    def _ask_about_category(self) -> dict:
+        self._make_input_intro("category")
+        return {
+            "name": input("Name: "),
             "description": input("Description: "),
             "expected": float(input("Expected (%.2): ")),
             "created_at": datetime.now(),

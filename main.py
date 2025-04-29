@@ -1,20 +1,24 @@
+import os
+from datetime import datetime
+
 import click
 
+from src.env import FOLDER_PATH
 from src.views.category_view import CategoryView
-from src.views.config import ConfigView
+from src.views.config_view import ConfigView
+from src.views.register_view import RegisterView
 from src.views.transaction_view import TransactionsView
 
 
-@click.group(help="Configuration options")
+@click.group(help="Financial-Manager")
 def config(): ...
 
 
 # CONFIGURATION
 #     ___     ___     ___     ___     ___     ___     ___     ___     ___
 @config.command("home", help="Print the home screen")
-@click.option("-t", help="Specifies a type of search from Categories", default=1)
-def home(t):
-    ConfigView().make_homescreen(t)
+def home():
+    ConfigView().make_homescreen()
 
 
 @config.command("migrate", help="Run migrations")
@@ -32,15 +36,36 @@ def top_transactions(results):
 
 @config.command("import", help="Imports an OFX")
 @click.argument(
-    "path", default="~/ofx.ofx", type=click.Path(exists=True), required=False
+    "path",
+    default=FOLDER_PATH,
+    type=click.Path(exists=True),
+    required=False,
 )
 def update_transactions(path):
-    TransactionsView().import_ofx(path)
+    if os.path.isfile(path):
+        TransactionsView().import_ofx(path)
+    else:
+        [
+            TransactionsView().import_ofx(f"{path}{item}")
+            for item in os.listdir(path)
+            if item[-4:] == ".ofx"
+        ]
+
+
+@config.command("export", help="Export an CSV with all transactions")
+@click.argument(
+    "path",
+    default=f"{FOLDER_PATH}/output_{datetime.now().isoformat()[:10]}.csv",
+    type=click.Path(exists=False),
+    required=False,
+)
+def export_transactions(path):
+    TransactionsView().export_csv(path)
 
 
 # Category
 #     ___     ___     ___     ___     ___     ___     ___     ___     ___
-@config.command(help="Get categories list")
+@config.command("category", help="Get categories list")
 def get_category_info():
     CategoryView().get_categories()
 
@@ -48,6 +73,11 @@ def get_category_info():
 @config.command("create", help="Register a new category")
 def create_category():
     CategoryView().new_category()
+
+
+@config.command("register", help="Create a new register")
+def create_register():
+    RegisterView().new_register()
 
 
 if __name__ == "__main__":

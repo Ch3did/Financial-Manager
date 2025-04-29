@@ -1,4 +1,9 @@
+import csv
+import os
 import re
+from typing import List
+
+from src.models.transaction import Transaction
 
 
 def sgml_to_xml(ofx_data):
@@ -20,3 +25,16 @@ def read_ofx_file(file_path):
             raise ValueError("Arquivo OFX inválido: Não contém <OFX>")
 
     return ofx_data
+
+
+def create_csv_file(file_path: str, data: Transaction):
+    file_exists = os.path.exists(file_path)
+
+    with open(file_path, mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+
+        if not file_exists:
+            headers = [item for item in data[0]]
+            writer.writerow(headers)
+
+        writer.writerow([item.values() for item in data])

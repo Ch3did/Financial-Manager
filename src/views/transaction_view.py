@@ -1,8 +1,8 @@
 from loguru import logger
 
-from src.controller.category_controller import CategoryController
 from src.controller.transactions_controller import TransactionController
 from src.helpers import clean_output
+from src.helpers.exception import ExtractionException, InputException
 from src.views.output import Output
 
 
@@ -10,14 +10,21 @@ class TransactionsView(Output):
     def __init__(self):
         super().__init__()
         self.transaction = TransactionController()
-        self.category = CategoryController()
 
     @clean_output
     def import_ofx(self, path: str):
         try:
             self.transaction.import_file(path)
+            logger.info("Import Sucessfully")
+        except InputException as error:
+            logger.error(error)
 
-        except Exception as error:
+    @clean_output
+    def export_csv(self, path: str):
+        try:
+            self.transaction.export_file(path)
+            logger.info("Export Sucessfully")
+        except ExtractionException as error:
             logger.error(error)
 
     @clean_output
@@ -31,7 +38,7 @@ class TransactionsView(Output):
 
             self.return_tabulated_data(transaction_data)
 
-        except Exception as error:
+        except ExtractionException as error:
             logger.error(f"{error}")
 
     @clean_output
@@ -41,10 +48,13 @@ class TransactionsView(Output):
             # data = self.category.get_categories_list()
 
             print("Changed sucessfully!")
-        except Exception as error:
+        except InputException as error:
             logger.error(f"{error}")
 
     def complete_category_on_transactions(self):
-        # category_list = self._get_category_list()
-        for transaction in self.transaction.get_incomplete_transactions():
-            self.update_category(transaction)
+        try:
+            category_list = self.transaction._get_category_list()
+            for transaction in self.transaction.get_incomplete_transactions():
+                self.update_category(transaction)
+        except InputException as err:
+            logger.error(f"{error}")
